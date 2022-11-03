@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="https://thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<title>Juego dados</title>
+</head>
+
+
+<body>
+
+	<h1 class="text-white">Ver Usuario</h1>
+
+	<form th:action="@{/players/getOne}" th:object="${Usuario}" method="get">
+
+		<input type="hidden" th:field="*{usuarioID}">
+
+		<div class="form-group row">
+			<label class="col-lg-3 text-center text-white">Nombre Usuario
+				</label>
+			<input type="text" th:field="*{nombreUsuario}" disabled> <br>
+			<label class="col-lg-3 text-center text-white required">FEcha Registro
+				</label>
+			<input type="text" th:field="*{fechaRegistro}" disabled> <br>
+			<label class="col-lg-3 text-center text-white required">Porcentage
+				Exito</label>
+			<input type="text" th:field="*{porcentageExito}" disabled> <br>
+		</div>
+	</form>
+</body>
+
+</html>
