@@ -1,0 +1,17 @@
+Documentar API: Swagger: https://www.youtube.com/watch?v=ECTRRXJalh0
+
+			 https://www.tutorialspoint.com/spring_boot/spring_boot_enabling_swagger2.htm
+
+
+Atributo fecha registro (mapearlo): https://www.oscarblancarteblog.com/2016/11/23/mapeo-fechas-temporal/
+
+Lanzamiento dados: https://www.lawebdelprogramador.com/foros/Java/1692149-Programa-de-lanzamiento-de-dados.html
+
+
+Anotacion OneToMany - Cascada : https://www.baeldung.com/jpa-cascade-types
+				https://refactorizando.com/ejemplo-relacion-onetomany-hibernate/
+
+
+Obtencion objetos en la coleccion: https://www.apuntesdejava.com/2011/01/restful-parte-3-manejando-colecciones.html
+
+Valor dado: https://programandoointentandolo.com/2013/10/como-generar-numeros-aleatorios-en-java.html
