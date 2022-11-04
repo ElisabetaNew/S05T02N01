@@ -11,7 +11,7 @@
 
 	<h1 class="text-white">Lista usuarios</h1>
 
-	<form th:object="${Lista_Usuarios}" method="get" th:action="@{/players/getAll}">
+	<form th:object="${Lista_Usuarios}" method="get" th:action="@{/players/ranking}">
 	</form>
 
 	<div class="table-responsive">
@@ -48,6 +48,10 @@
 					th:href="@{'/players/delete/' + ${usuario.usuarioID}}"
 					role="button"
 					onclick="confirm('¿Quiere borrar su usuario?')">Borrar cuenta usuario</a></td>
+					<td><a class="btn btn-danger"
+					th:href="@{'/players/deletePartidas/' + ${usuario.usuarioID}}"
+					role="button"
+					onclick="confirm('¿Quiere borrar todas sus partidas?')">Borrar lista partidas usuario</a></td>
 					
 					
 				</tr>

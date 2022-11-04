@@ -2,7 +2,6 @@ package cat.itacademy.barcelonactiva.MarcualMora.Elisenda.s05.t02.n01.model.doma
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -13,10 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
-import cat.itacademy.barcelonactiva.MarcualMora.Elisenda.s05.t02.n01.model.dto.UsuarioDTO;
 
 @Entity
 @Table(name = "usuarios")
@@ -88,7 +84,7 @@ public class Usuario {
 	}
 
 	// retornar las partidas de ese usuario en concreto
-	public List<Partida> getPartidas(UsuarioDTO usuario) {
+	public List<Partida> getPartidas(Integer usuarioID) {
 		List<Partida> lista = new ArrayList<Partida>();
 		for (Partida partida : partidas) {
 			if (partida.getUsuarioID().equals(this.usuarioID)) {
@@ -107,11 +103,6 @@ public class Usuario {
 		partida.setUsuarioID(this.usuarioID);
 		return this;
 	}
-
-	/*
-	 * public void addPartida(Partida partida) { this.partidas.add(partida); }
-	 * 
-	 */
 
 	public float getPorcentageExito() {
 		return porcentageExito;

@@ -9,6 +9,8 @@ public interface UsuarioService {
 
 		public Integer addUsuario(UsuarioDTO usuarioDTO);
 		
+		public Integer addPartida(PartidaDTO partidaDTO);
+		
 		public List<UsuarioDTO> getAllUsuario();
 		
 		public List<PartidaDTO> getAllPartidasUsuario(Integer usuarioID);
@@ -19,9 +21,6 @@ public interface UsuarioService {
 		
 		public int deleteUsuario (Integer usuarioID);
 		
-		public float porcentageExito ();
+		public int deletePartidasUsuario (Integer usuarioID);
 		
-		public int tirada();
-		
-
 }

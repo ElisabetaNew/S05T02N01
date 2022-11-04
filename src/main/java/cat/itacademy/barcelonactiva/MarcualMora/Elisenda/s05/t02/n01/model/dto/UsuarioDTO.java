@@ -2,7 +2,6 @@ package cat.itacademy.barcelonactiva.MarcualMora.Elisenda.s05.t02.n01.model.dto;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import cat.itacademy.barcelonactiva.MarcualMora.Elisenda.s05.t02.n01.model.domain.Partida;
@@ -26,7 +25,7 @@ public class UsuarioDTO {
 		this.usuarioID = usuarioID;
 		this.nombreUsuario = nombreUsuario;
 		this.fechaRegistro = fechaRegistro;
-		this.partidas = partidas;
+		this.partidas = new ArrayList<Partida>();
 		this.porcentageExito = porcentageExito;
 	}
 	
@@ -44,9 +43,7 @@ public class UsuarioDTO {
 	public Integer getUsuarioID() {
 		return usuarioID;
 	}
-
-
-	//se puede omitir porqque es un dato automatico 
+ 
 	public void setUsuarioID(Integer usuarioID) {
 		this.usuarioID = usuarioID;
 	}
@@ -64,17 +61,10 @@ public class UsuarioDTO {
 		return fechaRegistro;
 	}
 
-
-	public void setFechaRegistro() {
-		LocalDate c1 = LocalDate.now();
-		//Calendar c1 = Calendar.getInstance();
-		//String dia = Integer.toString(c.get(Calendar.DATE));
-		//String mes = Integer.toString(c.get(Calendar.MONTH));
-		//String annio = Integer.toString(c.get(Calendar.YEAR));
-		this.fechaRegistro = c1;
+	public void setFechaRegistro(LocalDate fechaRegistro) {
+		this.fechaRegistro = fechaRegistro;
 	}
 
-	
 	public List<Partida> getPartidas() {
 		return partidas;
 	}
@@ -85,7 +75,7 @@ public class UsuarioDTO {
 
 
 	//retornar las partidas de ese usuario en concreto
-	public List<Partida> getPartidas(UsuarioDTO usuario) {
+	public List<Partida> getPartidas(Integer usuarioID) {
 		List<Partida> lista = new ArrayList<Partida>();
 		for (Partida partida : partidas) {
 			if (partida.getUsuarioID().equals(this.usuarioID)) {
@@ -97,6 +87,11 @@ public class UsuarioDTO {
 	
 	public float getPorcentageExito() {
 		return porcentageExito;
+	}
+
+	
+	public void setPorcentageExito(float porcentageExito) {
+		this.porcentageExito = porcentageExito;
 	}
 
 	//para obtener el percentatge contar partidas ganadas y dividirlas por total partidas
