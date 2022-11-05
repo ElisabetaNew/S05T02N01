@@ -37,6 +37,10 @@ public class UsuarioDTO {
 		this.usuarioID = usuarioID;
 		this.nombreUsuario = nombreUsuario;
 	}
+	
+	public UsuarioDTO(String nombreUsuario) {
+		this.nombreUsuario = nombreUsuario;
+	}
 
 	
 	//getters y setters

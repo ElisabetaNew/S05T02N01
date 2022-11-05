@@ -26,11 +26,11 @@ public class Usuario {
 	@Column(name = "nombre_usuario", length = 150, nullable = false)
 	private String nombreUsuario;
 
-	@Column(name = "fecha_registro") // updatable = false, nullable = false)
+	@Column(name = "fecha_registro", updatable = true, nullable = true)
 	// @Temporal(TemporalType.DATE)
 	private LocalDate fechaRegistro;
 
-	@Column(name = "porcetage_Exito", length = 10, nullable = false)
+	@Column(name = "porcetage_Exito", length = 10, nullable = true)
 	private float porcentageExito;
 
 	@OneToMany(mappedBy = "usuarioID", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -41,12 +41,18 @@ public class Usuario {
 
 	}
 
+	public Usuario(String nombreUsuario) {
+		this.nombreUsuario = nombreUsuario;
+	}
+	
+
 	public Usuario(Integer usuarioID, String nombreUsuario, LocalDate fechaRegistro) {
 		super();
 		this.usuarioID = usuarioID;
 		this.nombreUsuario = nombreUsuario;
 		this.fechaRegistro = fechaRegistro;
 	}
+
 
 	public Usuario(Integer usuarioID, String nombreUsuario, LocalDate fechaRegistro, float porcentageExito) {
 		super();

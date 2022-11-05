@@ -28,7 +28,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 		Usuario usuario = this.mapDTOtoEntityUsuario(usuarioDTO);
 		usuario = usuarioRepository.save(usuario);
 		return usuario.getUsuarioID();
-	}
+	}	
 
 	@Override
 	public Integer addPartida(PartidaDTO partidaDTO) {
@@ -101,6 +101,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 	// convierte en UsuarioDTO / PartidaDTO los datos que llegan de la BBDD (Usuario / Partida)
 	private UsuarioDTO mapEntitytoDTOUsuario(Usuario usuario) {
 		UsuarioDTO dto = new UsuarioDTO();
+		dto.setUsuarioID(usuario.getUsuarioID());
 		dto.setNombreUsuario(usuario.getNombreUsuario());
 		dto.setFechaRegistro(usuario.getFechaRegistro());
 		dto.setPorcentageExito(usuario.getPorcentageExito());
@@ -122,10 +123,15 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	// convierte en Usuario / Partida los datos que llegan de la vista (UsuarioDTO) para poderlos volcar a las BBDD
 	private Usuario mapDTOtoEntityUsuario(UsuarioDTO udto) {
+ 
 		Usuario usuario = new Usuario();
 		usuario.setUsuarioID(udto.getUsuarioID());
 		usuario.setNombreUsuario(udto.getNombreUsuario());
-		usuario.setFechaRegistro(udto.getFechaRegistro());
+		if (udto.getFechaRegistro() == null) {
+			usuario.setFechaRegistro(fechaRegistro());
+		} else {
+			usuario.setFechaRegistro(udto.getFechaRegistro());
+		}		
 		usuario.setPartidas(udto.getPartidas());
 		usuario.setPorcentageExito(udto.getPorcentageExito());
 		// usuario.addPartida(dto.)
@@ -203,7 +209,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	// da valor de fecha de alta del usuario
-	public LocalDate FechaRegistro() {
+	public LocalDate fechaRegistro() {
 		LocalDate fecha = LocalDate.now();
 		return fecha;
 	}

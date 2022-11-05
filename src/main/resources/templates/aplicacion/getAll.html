@@ -2,62 +2,72 @@
 <html xmlns:th="https://thymeleaf.org">
 
 <head>
-<meta charset="UTF-8">
-<title>Juego dados</title>
+	<meta charset="UTF-8">
+	<title>Juego dados</title>
 </head>
 
 
 <body>
 
-	<h1 class="text-white">Lista usuarios</h1>
+	<!DOCTYPE html>
+	<html lang="es" xmlns:th="http://www.thymeleaf.org">
+	<meta charset="UTF-8">
+	<title>Juego Dados</title>
 
-	<form th:object="${Lista_Usuarios}" method="get" th:action="@{/players/ranking}">
-	</form>
 
-	<div class="table-responsive">
-		<table id="userList" class="table table-bordered table-hover table-striped">
-			<thead class="thead-light">
-				<tr>
-					<th scope="col">ID</th>
-					<th scope="col">Nombre</th>
-					<th scope="col">FechaRegistro</th>
-					<th scope="col">PorcentajeDeExito</th>
-					<th colspan="3"></th>
-				</tr>
-			</thead>
-			<tbody>
+	<!-- Bootstrap CSS -->
+	<link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}">
+	</head>
 
-				<tr th:each="usuario : ${Lista_Usarios}">					
-					<td th:text="${usuario.usuarioID}"></td>
-					<!--<td><a href="#" th:text="${sucursal.nomSucursal}"></a></td>-->
-					<td th:text="${usuario.nombreUsuario}"></td>
-					<td th:text="${usuario.fechaRegistro}"></td>
-					<td th:text="${usuario.porcentageExito}"></td>
-					<!--
-					<td><a class="btn btn-info"
-					th:href="@{/sucursal/getOne/${sucursal.pk_SucursalID}}"
-					role="button">Ver detalle</a></td>
-					-->
-					<td><a class="btn btn-info"
-					th:href="@{'/players/getOne/' + ${usuario.usuarioID}}"
-					role="button">Ver detalle</a></td>
-					<td><a class="btn btn-warning"
-					th:href="@{'/players/update/' + ${usuario.usuarioID}}"
-					role="button">Modificar sucursal</a></td>
-					<td><a class="btn btn-danger"
-					th:href="@{'/players/delete/' + ${usuario.usuarioID}}"
-					role="button"
-					onclick="confirm('¿Quiere borrar su usuario?')">Borrar cuenta usuario</a></td>
-					<td><a class="btn btn-danger"
-					th:href="@{'/players/deletePartidas/' + ${usuario.usuarioID}}"
-					role="button"
-					onclick="confirm('¿Quiere borrar todas sus partidas?')">Borrar lista partidas usuario</a></td>
-					
-					
-				</tr>
-				</tr>
+	<body>
 
-			</tbody>
-		</table>	
-		<br> <a class="btn btn-primary" th:href="@{/players/add}" role="button"> Alta nuevo usuario </a>			
-	</div>
+		<a class="btn btn-primary" th:href="@{/players/}" role="button">Pantalla inicio</a>
+		<br>
+		<h1 class="text-black">Lista usuarios</h1>
+
+		<form th:object="${Lista_Usuarios}" method="get" th:action="@{/players/ranking}">
+		</form>
+
+		<div class="table-responsive">
+			<table id="userList" class="table table-bordered table-hover table-striped">
+				<thead class="thead-light">
+					<tr>
+						<th scope="col">ID</th>
+						<th scope="col">Nombre</th>
+						<th scope="col">FechaRegistro</th>
+						<th scope="col">PorcentajeDeExito</th>
+						<th colspan="3"></th>
+					</tr>
+				</thead>
+				<tbody>
+
+					<tr th:each="usuario : ${Lista_Usuarios}">
+						<td th:text="${usuario.usuarioID}"></td>
+						<td th:text="${usuario.nombreUsuario}"></td>
+						<td th:text="${usuario.fechaRegistro}"></td>
+						<td th:text="${usuario.porcentageExito}"></td>
+
+
+						<td><a class="btn btn-info" th:href="@{'/players/getOne/' + ${usuario.usuarioID}}"
+								role="button">Ver detalle</a></td>
+						<td><a class="btn btn-warning" th:href="@{'/players/update/' + ${usuario.usuarioID}}"
+								role="button">Modificar sucursal</a></td>
+						<td><a class="btn btn-danger" th:href="@{'/players/delete/' + ${usuario.usuarioID}}"
+								role="button" onclick="confirm('¿Quiere borrar su usuario?')">Borrar cuenta usuario</a>
+						</td>
+						<td><a class="btn btn-danger" th:href="@{'/players/deletePartidas/' + ${usuario.usuarioID}}"
+								role="button" onclick="confirm('¿Quiere borrar todas sus partidas?')">Borrar lista
+								partidas usuario</a></td>
+
+
+					</tr>
+					</tr>
+
+				</tbody>
+			</table>
+			<br> <a class="btn btn-primary" th:href="@{/players/add}" role="button"> Alta nuevo usuario </a>
+		</div>
+
+	</body>
+
+	<footer th:replace="plantillas/template :: footer"></footer>

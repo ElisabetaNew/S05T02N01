@@ -1,35 +1,41 @@
 <!DOCTYPE html>
-<html xmlns:th="https://thymeleaf.org">
-
-<head>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <meta charset="UTF-8">
-<title>Juego dados</title>
-</head>
+<title>Juego Dados</title>
 
+
+<!-- Bootstrap CSS -->
+<link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}">
+</head>
 
 <body>
 
-	<h1 class="text-white">Modificar Usuario</h1>
+		<a class="btn btn-primary" th:href="@{/players/}" role="button">Pantalla inicio</a>
+		<br>
+	<h1 class="text-black">Modificar Usuario</h1>
+	
+	
 
-	<form th:action="@{/players/guardar}" th:object="${Usuario}" method="get">
+	<form th:action="@{/players/guardar}" th:object="${Usuario}" method="post">
 
 		<input type="hidden" th:field="*{usuarioID}">
 
 		<div class="form-group row">
-			<label class="col-lg-3 text-center text-white">Nombre Usuario
-				</label>
-			<input type="text" th:field="*{nombreUsuario}" disabled> <br>
-			<label class="col-lg-3 text-center text-white required">FEcha Registro
-				</label>
-			<input type="text" th:field="*{fechaRegistro}" disabled> <br>
-			<label class="col-lg-3 text-center text-white required">Porcentage
+			<label class="col-lg-3 text-center text-black">Nombre Usuario
+			</label>
+			<input type="text" th:field="*{nombreUsuario}"> <br>
+			<label class="col-lg-3 text-center text-black required">Fecha Registro
+			</label>
+			<input type="text" th:field="*{fechaRegistro}"> <br>
+			<label class="col-lg-3 text-center text-black required">Porcentage
 				Exito</label>
-			<input type="text" th:field="*{porcentageExito}" disabled> <br>
+			<input type="text" th:field="*{porcentageExito}"> <br>
 		</div>
-		
-	<button type="submit" class= "btn btn-success"> Save Changes</button>
-	<a class="btn btn-danger" th:href="@{/players/getAll}" role="button">Cancelar</a>	
+
+		<button type="submit" class="btn btn-success"> Save Changes</button>
+		<a class="btn btn-danger" th:href="@{/players/ranking}" role="button">Cancelar y volver al listado</a>
 	</form>
+
 </body>
 
-</html>
+<footer th:replace="plantillas/template :: footer"></footer>

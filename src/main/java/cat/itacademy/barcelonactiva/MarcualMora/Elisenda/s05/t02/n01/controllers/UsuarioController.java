@@ -21,9 +21,12 @@ import cat.itacademy.barcelonactiva.MarcualMora.Elisenda.s05.t02.n01.model.servi
 public class UsuarioController {
 
 	@GetMapping({ "", "/" })
-	public String mostrarprueba(Model model) {
-		model.addAttribute("nombre", "Elisenda Marcual");
-		return "inicio";
+	public ModelAndView paginaInicio() {
+		UsuarioDTO usuario = new UsuarioDTO();
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("Usuario", usuario);
+		modelAndView.setViewName("inicio");
+		return modelAndView;
 	}
 
 	@Autowired
@@ -53,7 +56,7 @@ public class UsuarioController {
 		modelAndView.addObject("Partida", partida);
 		modelAndView.setViewName("aplicacion/jugada");
 		return modelAndView;
-	}
+	}	
 
 	@PostMapping("/guardarPartida")
 	public ModelAndView savePatida(@ModelAttribute("Partida") PartidaDTO partidaDTO) {
@@ -127,6 +130,7 @@ public class UsuarioController {
 	@GetMapping("/update/{id}")
 	public ModelAndView updateUsuario(ModelAndView modelAndView, @PathVariable("id") Integer id) {
 		UsuarioDTO usuarioDTO = usuarioService.getOneUsuario(id);
+		usuarioService.updateUsuario(id, usuarioDTO);
 		modelAndView.addObject("Usuario", usuarioDTO);
 		modelAndView.setViewName("aplicacion/update");
 		return modelAndView;
