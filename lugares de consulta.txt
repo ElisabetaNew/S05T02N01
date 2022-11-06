@@ -15,3 +15,12 @@ Anotacion OneToMany - Cascada : https://www.baeldung.com/jpa-cascade-types
 Obtencion objetos en la coleccion: https://www.apuntesdejava.com/2011/01/restful-parte-3-manejando-colecciones.html
 
 Valor dado: https://programandoointentandolo.com/2013/10/como-generar-numeros-aleatorios-en-java.html
+
+Buscar minimo y maximo de un valor en una lista:https://picodotdev.github.io/blog-bitix/2017/10/obtener-el-minimo-o-maximo-de-dos-una-lista-o-stream-de-valores-en-java/#:~:text=Sin%20embargo%2C%20en%20la%20API,estos%20poseen%20un%20m%C3%A9todo%20Stream.
+
+Paginas web / registro usuarios :https://www.youtube.com/watch?v=0wTsLRxS3gA
+
+fecha registro - if : https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Operators/Conditional_Operator
+
+Borrar de una lista: forEach - Iterator
+
