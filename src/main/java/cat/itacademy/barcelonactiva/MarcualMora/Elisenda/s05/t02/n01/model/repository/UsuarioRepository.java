@@ -1,5 +1,7 @@
 package cat.itacademy.barcelonactiva.MarcualMora.Elisenda.s05.t02.n01.model.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -7,6 +9,8 @@ import cat.itacademy.barcelonactiva.MarcualMora.Elisenda.s05.t02.n01.model.domai
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer>  {
+	
+	//Optional <Usuario> findByName(String nombreUsuario);
 
 }
 

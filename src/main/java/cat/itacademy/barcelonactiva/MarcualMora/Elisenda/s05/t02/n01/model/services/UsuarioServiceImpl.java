@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 		Usuario usuario = this.mapDTOtoEntityUsuario(usuarioDTO);
 		usuario = usuarioRepository.save(usuario);
 		return usuario.getUsuarioID();
-	}	
+	}
 
 	@Override
 	public Integer addPartida(PartidaDTO partidaDTO) {
@@ -60,6 +61,29 @@ public class UsuarioServiceImpl implements UsuarioService {
 		}
 		return dto;
 	}
+	
+//	@Override
+//	public UsuarioDTO getUsuarioxNombre(String nombreUsuario) {
+//		UsuarioDTO dto = null;
+//		Optional<Usuario> usuario = usuarioRepository.findByName(nombreUsuario); // Optional = puede existir o no
+//		if (usuario.isPresent()) {
+//			dto = this.mapEntitytoDTOUsuario(usuario.get());
+//		} else {
+//			dto = new UsuarioDTO(); // para no pasarselo vacia
+//		}
+//		return dto;
+//	}
+
+	@Override
+	public boolean getOneUsuario(String nombreUsuario) {
+		List<UsuarioDTO> usuarios = this.getAllUsuario();
+		for (UsuarioDTO usuarioDTO : usuarios) {
+			if (usuarioDTO.getNombreUsuario().equalsIgnoreCase(nombreUsuario)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	@Override
 	public UsuarioDTO updateUsuario(Integer usuarioID, UsuarioDTO usuarioDTO) {
@@ -73,32 +97,31 @@ public class UsuarioServiceImpl implements UsuarioService {
 	@Override
 	public int deleteUsuario(Integer usuarioID) {
 		try {
-			usuarioRepository.deleteById(usuarioID);		
+			usuarioRepository.deleteById(usuarioID);
 			return 1;
 		} catch (Exception e) {
 			return 0;
 		}
 	}
-	
+
 	@Override
 	public int deletePartidasUsuario(Integer usuarioID) {
 		try {
-			Optional<Usuario> usuario = usuarioRepository.findById(usuarioID);	
+			Optional<Usuario> usuario = usuarioRepository.findById(usuarioID);
 			if (usuario.isPresent()) {
-				List<Partida>partidas = usuario.get().getPartidas(usuarioID);
+				List<Partida> partidas = usuario.get().getPartidas(usuarioID);
 				partidas.clear();
-			} 
+			}
 			return 1;
 		} catch (Exception e) {
 			return 0;
 		}
 	}
-	
-	
 
 	// metodos mapear datos: EntitytoDTO y de DTOtoEntity
 
-	// convierte en UsuarioDTO / PartidaDTO los datos que llegan de la BBDD (Usuario / Partida)
+	// convierte en UsuarioDTO / PartidaDTO los datos que llegan de la BBDD (Usuario
+	// / Partida)
 	private UsuarioDTO mapEntitytoDTOUsuario(Usuario usuario) {
 		UsuarioDTO dto = new UsuarioDTO();
 		dto.setUsuarioID(usuario.getUsuarioID());
@@ -121,17 +144,22 @@ public class UsuarioServiceImpl implements UsuarioService {
 		return dto;
 	}
 
-	// convierte en Usuario / Partida los datos que llegan de la vista (UsuarioDTO) para poderlos volcar a las BBDD
+	// convierte en Usuario / Partida los datos que llegan de la vista (UsuarioDTO)
+	// para poderlos volcar a las BBDD
 	private Usuario mapDTOtoEntityUsuario(UsuarioDTO udto) {
- 
+
 		Usuario usuario = new Usuario();
 		usuario.setUsuarioID(udto.getUsuarioID());
-		usuario.setNombreUsuario(udto.getNombreUsuario());
+		if (udto.getNombreUsuario().equals("") || udto.getNombreUsuario() == null) {
+			usuario.setNombreUsuario("Anonimo");
+		} else {
+			usuario.setNombreUsuario(udto.getNombreUsuario());
+		}
 		if (udto.getFechaRegistro() == null) {
 			usuario.setFechaRegistro(fechaRegistro());
 		} else {
 			usuario.setFechaRegistro(udto.getFechaRegistro());
-		}		
+		}
 		usuario.setPartidas(udto.getPartidas());
 		usuario.setPorcentageExito(udto.getPorcentageExito());
 		// usuario.addPartida(dto.)
@@ -150,7 +178,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 		return partida;
 	}
 
-	// devuelve lista de UsuariosDTO/ PartidaDTO a partir de lista de usuarios/partidas (entity)
+	// devuelve lista de UsuariosDTO/ PartidaDTO a partir de lista de
+	// usuarios/partidas (entity)
 	private List<UsuarioDTO> getDTOByUsuarios(List<Usuario> usuarios) {
 		List<UsuarioDTO> usuariosdto = null;
 		if (usuarios != null) {
@@ -178,10 +207,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 		}
 		return partidasdto;
 	}
-	
 
 	// metodos extras de calculos
-	
 
 	// calcula porcentage de partidas ganadas sobre e ltotal de la lista de usuarios
 	public float porcentageExito() {
@@ -203,7 +230,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	// da valor aleatorio entre el 0-6 al dado
 	public int tirada() {
-
 		int dado = (int) (Math.random() * 7);
 		return dado;
 	}

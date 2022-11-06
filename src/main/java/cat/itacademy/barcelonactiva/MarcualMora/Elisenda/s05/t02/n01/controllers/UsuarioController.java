@@ -2,9 +2,10 @@ package cat.itacademy.barcelonactiva.MarcualMora.Elisenda.s05.t02.n01.controller
 
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,12 +42,17 @@ public class UsuarioController {
 		modelAndView.setViewName("aplicacion/add");
 		return modelAndView;
 	}
-
+	
 	@PostMapping("/guardar")
 	public ModelAndView saveUsuario(@ModelAttribute("Usuario") UsuarioDTO usuarioDTO) {
-		usuarioService.addUsuario(usuarioDTO);
-		return new ModelAndView("redirect:/players/ranking");
+		if(usuarioService.getOneUsuario(usuarioDTO.getNombreUsuario())==true){
+			//JOptionPane.showInputDialog("Este nombre ya esta registrado"); -- incluir mensage pero da error
+			return new ModelAndView("redirect:/players");
+		}else {
+			usuarioService.addUsuario(usuarioDTO);
+		}return new ModelAndView("redirect:/players/ranking");
 	}
+	
 
 	// http://localhost:9000/players/add/{id}/games ---- jugada
 	@GetMapping("/add/{id}/games")
@@ -91,6 +97,16 @@ public class UsuarioController {
 		modelAndView.setViewName("aplicacion/getOne");
 		return modelAndView;
 	}
+	
+	
+//	// http://localhost:9000/players/getOne/{nombreUsuario} ----- recuperar usuario por nombre
+//		@GetMapping("/getOne/{nombreUsuario}")
+//		public ModelAndView getJugador(ModelAndView modelAndView, @PathVariable("nombreUsuario") String nombreUsuario) {
+//			UsuarioDTO usuario = usuarioService.getUsuarioxNombre(nombreUsuario);
+//			modelAndView.addObject("Usuario", usuario);
+//			modelAndView.setViewName("aplicacion/jugada");
+//			return modelAndView;
+//		}
 
 	// http://localhost:9000/players/ranking/loser ----- recuperar usuario con peor ranking de partidas ganadas
 	@GetMapping("/ranking/loser")

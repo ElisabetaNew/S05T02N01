@@ -16,11 +16,15 @@ public interface UsuarioService {
 		public List<PartidaDTO> getAllPartidasUsuario(Integer usuarioID);
 		
 		public UsuarioDTO getOneUsuario(Integer usuarioID);
+			
+		public boolean getOneUsuario(String nombreUsuario);
 		
 		public UsuarioDTO updateUsuario (Integer usuarioID, UsuarioDTO usuarioDTO);
 		
 		public int deleteUsuario (Integer usuarioID);
 		
 		public int deletePartidasUsuario (Integer usuarioID);
+
+	//	public UsuarioDTO getUsuarioxNombre(String nombreUsuario);
 		
 }
