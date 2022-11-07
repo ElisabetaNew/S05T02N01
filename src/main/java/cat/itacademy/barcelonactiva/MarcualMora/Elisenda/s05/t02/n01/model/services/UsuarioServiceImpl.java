@@ -62,17 +62,18 @@ public class UsuarioServiceImpl implements UsuarioService {
 		return dto;
 	}
 	
-//	@Override
-//	public UsuarioDTO getUsuarioxNombre(String nombreUsuario) {
-//		UsuarioDTO dto = null;
-//		Optional<Usuario> usuario = usuarioRepository.findByName(nombreUsuario); // Optional = puede existir o no
-//		if (usuario.isPresent()) {
-//			dto = this.mapEntitytoDTOUsuario(usuario.get());
-//		} else {
-//			dto = new UsuarioDTO(); // para no pasarselo vacia
-//		}
-//		return dto;
-//	}
+	@Override
+	public Integer getJugador(String nombreUsuario) {
+		Integer id = null;
+		List<Usuario> usuarios = usuarioRepository.findAll();
+		for (int i = 0; i < usuarios.size(); i++) {
+			if(usuarios.get(i).getNombreUsuario().equalsIgnoreCase(nombreUsuario)) {
+			id=	usuarios.get(i).getUsuarioID();
+		}
+		}
+		return id;
+		}	
+				
 
 	@Override
 	public boolean getOneUsuario(String nombreUsuario) {

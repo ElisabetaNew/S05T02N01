@@ -42,17 +42,18 @@ public class UsuarioController {
 		modelAndView.setViewName("aplicacion/add");
 		return modelAndView;
 	}
-	
+
 	@PostMapping("/guardar")
 	public ModelAndView saveUsuario(@ModelAttribute("Usuario") UsuarioDTO usuarioDTO) {
-		if(usuarioService.getOneUsuario(usuarioDTO.getNombreUsuario())==true){
-			//JOptionPane.showInputDialog("Este nombre ya esta registrado"); -- incluir mensage pero da error
+		if (usuarioService.getOneUsuario(usuarioDTO.getNombreUsuario()) == true) {
+			// JOptionPane.showInputDialog("Este nombre ya esta registrado"); -- incluir
+			// mensage pero da error
 			return new ModelAndView("redirect:/players");
-		}else {
+		} else {
 			usuarioService.addUsuario(usuarioDTO);
-		}return new ModelAndView("redirect:/players/ranking");
+		}
+		return new ModelAndView("redirect:/players/ranking");
 	}
-	
 
 	// http://localhost:9000/players/add/{id}/games ---- jugada
 	@GetMapping("/add/{id}/games")
@@ -62,7 +63,7 @@ public class UsuarioController {
 		modelAndView.addObject("Partida", partida);
 		modelAndView.setViewName("aplicacion/jugada");
 		return modelAndView;
-	}	
+	}
 
 	@PostMapping("/guardarPartida")
 	public ModelAndView savePatida(@ModelAttribute("Partida") PartidaDTO partidaDTO) {
@@ -70,7 +71,8 @@ public class UsuarioController {
 		return new ModelAndView("redirect:/players/getAllPartidas");
 	}
 
-	// http://localhost:9000/players/getAll ---- recuperar todos los usuarios con el porcentage de aciertos
+	// http://localhost:9000/players/getAll ---- recuperar todos los usuarios con el
+	// porcentage de aciertos
 	@GetMapping("/ranking")
 	public ModelAndView listaAllUsuarios(ModelAndView modelAndView) {
 		List<UsuarioDTO> usuarios = usuarioService.getAllUsuario();
@@ -97,27 +99,36 @@ public class UsuarioController {
 		modelAndView.setViewName("aplicacion/getOne");
 		return modelAndView;
 	}
-	
-	
-//	// http://localhost:9000/players/getOne/{nombreUsuario} ----- recuperar usuario por nombre
-//		@GetMapping("/getOne/{nombreUsuario}")
-//		public ModelAndView getJugador(ModelAndView modelAndView, @PathVariable("nombreUsuario") String nombreUsuario) {
-//			UsuarioDTO usuario = usuarioService.getUsuarioxNombre(nombreUsuario);
-//			modelAndView.addObject("Usuario", usuario);
-//			modelAndView.setViewName("aplicacion/jugada");
-//			return modelAndView;
-//		}
 
-	// http://localhost:9000/players/ranking/loser ----- recuperar usuario con peor ranking de partidas ganadas
+	@GetMapping("/entrar")
+	public ModelAndView entrarUsuario() {
+		UsuarioDTO usuario = new UsuarioDTO();
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("Usuario", usuario);
+		modelAndView.setViewName("aplicacion/jugada");
+		return modelAndView;
+	}
+	
+	// http://localhost:9000/players/jugada/{nombreUsuario} ----- recuperar usuario por nombre
+	@GetMapping("/jugada/{nombreUsuario}")
+	public ModelAndView getJugador(ModelAndView modelAndView, @PathVariable("nombreUsuario") String nombreUsuario) {
+		UsuarioDTO usuario = usuarioService.getOneUsuario(usuarioService.getJugador(nombreUsuario));
+		modelAndView.addObject("Usuario", usuario);
+		modelAndView.setViewName("aplicacion/jugada");
+		return modelAndView;
+	}
+
+	// http://localhost:9000/players/ranking/loser ----- recuperar usuario con peor
+	// ranking de partidas ganadas
 	@GetMapping("/ranking/loser")
 	public ModelAndView getloser(ModelAndView modelAndView) {
 		List<UsuarioDTO> usuarios = usuarioService.getAllUsuario();
 		float porcentage = Integer.MAX_VALUE;
 		UsuarioDTO usuariodto = new UsuarioDTO();
 		for (int i = 0; i < usuarios.size(); i++) {
-			if(porcentage > usuarios.get(i).getPorcentageExito()) {
+			if (porcentage > usuarios.get(i).getPorcentageExito()) {
 				usuariodto = usuarios.get(i);
-				porcentage = usuarios.get(i).getPorcentageExito(); 
+				porcentage = usuarios.get(i).getPorcentageExito();
 			}
 		}
 		modelAndView.addObject("UsuarioLosar", usuariodto);
@@ -125,16 +136,17 @@ public class UsuarioController {
 		return modelAndView;
 	}
 
-	// http://localhost:9000/players/ranking/winner ----- recuperar usuario con mejor ranking de partidas ganadas
+	// http://localhost:9000/players/ranking/winner ----- recuperar usuario con
+	// mejor ranking de partidas ganadas
 	@GetMapping("/ranking/winner")
 	public ModelAndView getwinner(ModelAndView modelAndView) {
 		List<UsuarioDTO> usuarios = usuarioService.getAllUsuario();
 		float porcentage = Integer.MIN_VALUE;
 		UsuarioDTO usuariodto = new UsuarioDTO();
 		for (int i = 0; i < usuarios.size(); i++) {
-			if(porcentage < usuarios.get(i).getPorcentageExito()) {
+			if (porcentage < usuarios.get(i).getPorcentageExito()) {
 				usuariodto = usuarios.get(i);
-				porcentage = usuarios.get(i).getPorcentageExito(); 
+				porcentage = usuarios.get(i).getPorcentageExito();
 			}
 		}
 		modelAndView.addObject("UsuarioLosar", usuariodto);

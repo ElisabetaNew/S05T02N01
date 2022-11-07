@@ -25,6 +25,6 @@ public interface UsuarioService {
 		
 		public int deletePartidasUsuario (Integer usuarioID);
 
-	//	public UsuarioDTO getUsuarioxNombre(String nombreUsuario);
+		public Integer getJugador(String nombreUsuario);
 		
 }

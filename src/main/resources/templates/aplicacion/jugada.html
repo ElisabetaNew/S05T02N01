@@ -10,36 +10,30 @@
 
 <body>
 
-	<h1 class="text-black">Jugada</h1>
+	<a class="btn btn-primary" th:href="@{/players/}" role="button">Pantalla inicio</a>
+	<br> 
+	<h1 class="text-black">Jugada</h1> 
 
-	<form th:action="@{/players/guardar}" th:object="${Usuario}" method="post">
+
+	<form th:action="@{/players/getOne}" th:object="${Usuario}" method="get">
+
+		<input type="hidden" th:field="*{usuarioID}">
 
 		<div class="form-group row">
-			<label class="col-lg-3 col-form-label form-control-label text-center text-white required">Nombre
-				Usario</label>
-			<div class="col-lg-3">
-				<input type="text" th:field="*{nombreUsuario}" placeholder="Nombre Usuario"
-					class="form-control mb-4 col-4"> <br>
-			</div>
+			<label class="col-lg-3 text-center text-black">Nombre Usuario
+			</label>
+			<input type="text" th:field="*{nombreUsuario}" disabled> <br>
+			
+			<label class="col-lg-3 text-center text-black required">Porcentage
+				Exito</label>
+			<input type="text" th:field="*{porcentageExito}" disabled> <br>
 		</div>
-
-		<div class="col-lg-8 text-center">
-			<button type="submit" class="btn btn-info col-2"> Grabar usuario</button>
-
-		</div>
-
-		<br>
-
-		<div class="col-lg-6 text-center">
-			<span>Si ya estas registrado ves a la pantalla: </a></span>
-			<a class="btn btn-info col-2" th:href="@{/players/}" role="button">Incio</a>
-		</div>
-
-
-
+		
+		<a class="btn btn-danger" th:href="@{/players/ranking}" role="button">Lanzar dado</a>
 	</form>
 
 
 </body>
+
 
 <footer th:replace="plantillas/template :: footer"></footer>
