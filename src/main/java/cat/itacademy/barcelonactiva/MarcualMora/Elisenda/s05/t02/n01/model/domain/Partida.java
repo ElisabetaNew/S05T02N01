@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 
@@ -21,7 +22,6 @@ public class Partida{
 	
 	@Column(name = "dado1", length = 3, nullable = false)
 	private int dado1;
-	// int dado1 = (int) Math.ceil((Math.random()*6));
 	
 	@Column(name = "dado2", length = 3, nullable = false)
 	private int dado2;
@@ -35,7 +35,7 @@ public class Partida{
 	private Integer usuarioID;
 
 	
-	//constructor 
+	//constructores
 	public Partida(Integer partidaID, int dado1, int dado2, boolean resultado, Integer usuarioID) {
 		super();
 		this.partidaID = partidaID;
@@ -45,21 +45,22 @@ public class Partida{
 		this.usuarioID = usuarioID;
 	}
 	
-	public Partida(Integer partidaID, int dado1, int dado2) {
-		this.partidaID = partidaID;
+	public Partida(int dado1, int dado2, Integer usuarioID) {
 		this.dado1 = dado1;
 		this.dado2 = dado2;
+		this.usuarioID = usuarioID;
 	}
 	
 	public Partida() {
 		
 	}
 	
-	//getters y setters
-
+	//Getters y setters
 	public Integer getPartidaID() {
 		return partidaID;
 	}
+
+	
 
 	public void setPartidaID(Integer partidaID) {
 		this.partidaID = partidaID;
@@ -97,11 +98,13 @@ public class Partida{
 		this.usuarioID = usuarioID;
 	}
 
+	@Override
+	public String toString() {
+		return "Partida [partidaID=" + partidaID + ", dado1=" + dado1 + ", dado2=" + dado2 + ", resultado=" + resultado
+				+ ", usuarioID=" + usuarioID + "]";
+	}
+
 	
 
-
-	
-	
-	
 	
 }

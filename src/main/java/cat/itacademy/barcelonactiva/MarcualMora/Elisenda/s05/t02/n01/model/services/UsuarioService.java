@@ -2,18 +2,22 @@ package cat.itacademy.barcelonactiva.MarcualMora.Elisenda.s05.t02.n01.model.serv
 
 import java.util.List;
 
+import cat.itacademy.barcelonactiva.MarcualMora.Elisenda.s05.t02.n01.model.domain.Partida;
+import cat.itacademy.barcelonactiva.MarcualMora.Elisenda.s05.t02.n01.model.domain.Usuario;
 import cat.itacademy.barcelonactiva.MarcualMora.Elisenda.s05.t02.n01.model.dto.PartidaDTO;
 import cat.itacademy.barcelonactiva.MarcualMora.Elisenda.s05.t02.n01.model.dto.UsuarioDTO;
 
 public interface UsuarioService {
 
-		public Integer addUsuario(UsuarioDTO usuarioDTO);
+		public Usuario addUsuario(UsuarioDTO usuarioDTO);
 		
-		public Integer addPartida(PartidaDTO partidaDTO);
+		public Partida addPartida(Integer usuarioID, PartidaDTO partidaDTO);
 		
 		public List<UsuarioDTO> getAllUsuario();
 		
 		public List<PartidaDTO> getAllPartidasUsuario(Integer usuarioID);
+		
+		public List<Partida> getAllPartidas();
 		
 		public UsuarioDTO getOneUsuario(Integer usuarioID);
 			

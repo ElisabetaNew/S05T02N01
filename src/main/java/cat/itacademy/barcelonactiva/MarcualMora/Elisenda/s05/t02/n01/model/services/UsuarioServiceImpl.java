@@ -2,9 +2,9 @@ package cat.itacademy.barcelonactiva.MarcualMora.Elisenda.s05.t02.n01.model.serv
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,29 +25,58 @@ public class UsuarioServiceImpl implements UsuarioService {
 	PartidaRepository partidaRepository;
 
 	@Override
-	public Integer addUsuario(UsuarioDTO usuarioDTO) {
+	public Usuario addUsuario(UsuarioDTO usuarioDTO) {
 		Usuario usuario = this.mapDTOtoEntityUsuario(usuarioDTO);
-		usuario = usuarioRepository.save(usuario);
-		return usuario.getUsuarioID();
+		return usuarioRepository.save(usuario);
 	}
 
 	@Override
-	public Integer addPartida(PartidaDTO partidaDTO) {
+	public Partida addPartida(Integer usuarioID, PartidaDTO partidaDTO) {
+		partidaDTO.setUsuarioID(usuarioID);
+		int dado1 = tirada();
+		partidaDTO.setDado1(dado1);
+		int dado2 = tirada();
+		partidaDTO.setDado2(dado2);
+		// int total = dado1 + dado2;
+		// partidaDTO.setTotal(dado1 + dado2);
+		partidaDTO.setResultado(resultado(dado1 + dado2));
 		Partida partida = this.mapDTOtoEntityPartida(partidaDTO);
-		partida = partidaRepository.save(partida);
-		return partida.getPartidaID();
+		return partidaRepository.save(partida);
 	}
 
 	@Override
 	public List<UsuarioDTO> getAllUsuario() {
 		List<Usuario> usuarios = usuarioRepository.findAll();
+		for (Usuario usuario : usuarios) {
+			List<Partida> partidas = usuario.getPartidas();
+			int ganadas = 0;
+			for (Partida partida : partidas) {
+				if (partida.isResultado() == true) {
+					++ganadas;
+				}
+			}
+			usuario.setPorcentageExito((float) (ganadas * 100) / partidas.size());
+
+		}
 		return this.getDTOByUsuarios(usuarios);
+	}
+
+	@Override
+	public List<Partida> getAllPartidas() {
+		List<Partida> partidas = partidaRepository.findAll();
+		return partidas;
 	}
 
 	@Override
 	public List<PartidaDTO> getAllPartidasUsuario(Integer usuarioID) {
 		List<Partida> partidas = partidaRepository.findAll();
-		return this.getDTOByPartidas(partidas);
+		List<Partida> partidasjugador = new ArrayList<Partida>();
+		for (Partida partida : partidas) {
+			if (partida.getUsuarioID() == usuarioID) {
+				partidasjugador.add(partida);
+			}
+		}
+		return this.getDTOByPartidas(partidasjugador);
 	}
 
 	@Override
@@ -61,19 +90,18 @@ public class UsuarioServiceImpl implements UsuarioService {
 		}
 		return dto;
 	}
-	
+
 	@Override
 	public Integer getJugador(String nombreUsuario) {
 		Integer id = null;
 		List<Usuario> usuarios = usuarioRepository.findAll();
 		for (int i = 0; i < usuarios.size(); i++) {
-			if(usuarios.get(i).getNombreUsuario().equalsIgnoreCase(nombreUsuario)) {
-			id=	usuarios.get(i).getUsuarioID();
-		}
+			if (usuarios.get(i).getNombreUsuario().equalsIgnoreCase(nombreUsuario)) {
+				id = usuarios.get(i).getUsuarioID();
+			}
 		}
 		return id;
-		}	
-				
+	}
 
 	@Override
 	public boolean getOneUsuario(String nombreUsuario) {
@@ -89,7 +117,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 	@Override
 	public UsuarioDTO updateUsuario(Integer usuarioID, UsuarioDTO usuarioDTO) {
 		UsuarioDTO usuarioBuscado = this.getOneUsuario(usuarioID);
-		Usuario usuario = this.mapDTOtoEntityUsuario(usuarioDTO);
+		usuarioBuscado.setNombreUsuario(usuarioDTO.getNombreUsuario());
+		Usuario usuario = this.mapDTOtoEntityUsuario(usuarioBuscado);
 		usuario = usuarioRepository.save(usuario);
 		usuarioBuscado = this.mapEntitytoDTOUsuario(usuario);
 		return usuarioBuscado;
@@ -108,10 +137,22 @@ public class UsuarioServiceImpl implements UsuarioService {
 	@Override
 	public int deletePartidasUsuario(Integer usuarioID) {
 		try {
-			Optional<Usuario> usuario = usuarioRepository.findById(usuarioID);
-			if (usuario.isPresent()) {
-				List<Partida> partidas = usuario.get().getPartidas(usuarioID);
-				partidas.clear();
+			List<Partida> partidas = this.getAllPartidas();
+			
+//			for (Partida partida : partidas) {
+//				if (partida.getUsuarioID() == usuarioID) {
+//					partidaRepository.delete(partida);					
+//				}
+//			}
+			
+			
+			Iterator<Partida> it = partidas.iterator();
+			int i = 0;
+			while (it.hasNext() && i < partidas.size()) {
+				if (partidas.get(i).getUsuarioID() == usuarioID) {
+					partidaRepository.delete(partidas.get(i));					
+				}
+				i++;
 			}
 			return 1;
 		} catch (Exception e) {
@@ -129,7 +170,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 		dto.setNombreUsuario(usuario.getNombreUsuario());
 		dto.setFechaRegistro(usuario.getFechaRegistro());
 		dto.setPorcentageExito(usuario.getPorcentageExito());
-		dto.setPartidas(usuario.getPartidas(usuario.getUsuarioID()));
+		dto.setPartidas(usuario.getPartidas());
 
 		return dto;
 	}
@@ -139,7 +180,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 		dto.setDado1(partida.getDado1());
 		dto.setDado2(partida.getDado2());
 		dto.setPartidaID(partida.getPartidaID());
-		dto.setResultado();
 		dto.setUsuarioID(dto.getUsuarioID());
 
 		return dto;
@@ -231,7 +271,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	// da valor aleatorio entre el 0-6 al dado
 	public int tirada() {
-		int dado = (int) (Math.random() * 7);
+		int dado = (int) (Math.random() * 6);
 		return dado;
 	}
 
@@ -241,4 +281,11 @@ public class UsuarioServiceImpl implements UsuarioService {
 		return fecha;
 	}
 
+	// valora si partida es ganada o perdida
+	public boolean resultado(int total) {
+		if (total == 7) {
+			return true;
+		}
+		return false;
+	}
 }

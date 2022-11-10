@@ -1,24 +1,34 @@
 package cat.itacademy.barcelonactiva.MarcualMora.Elisenda.s05.t02.n01.controllers;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import javax.swing.JOptionPane;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import cat.itacademy.barcelonactiva.MarcualMora.Elisenda.s05.t02.n01.model.domain.Partida;
+import cat.itacademy.barcelonactiva.MarcualMora.Elisenda.s05.t02.n01.model.domain.Usuario;
 import cat.itacademy.barcelonactiva.MarcualMora.Elisenda.s05.t02.n01.model.dto.PartidaDTO;
 import cat.itacademy.barcelonactiva.MarcualMora.Elisenda.s05.t02.n01.model.dto.UsuarioDTO;
 import cat.itacademy.barcelonactiva.MarcualMora.Elisenda.s05.t02.n01.model.services.UsuarioServiceImpl;
 
-@Controller
+@RestController
 @RequestMapping("/players")
+@CrossOrigin(origins = "http://localhost:9000")
 public class UsuarioController {
 
 	@GetMapping({ "", "/" })
@@ -33,95 +43,61 @@ public class UsuarioController {
 	@Autowired
 	private UsuarioServiceImpl usuarioService;
 
-	// http://localhost:9000/players/add ---- crear jugador
-	@GetMapping("/add")
-	public ModelAndView addUsuario() {
-		UsuarioDTO usuario = new UsuarioDTO();
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.addObject("Usuario", usuario);
-		modelAndView.setViewName("aplicacion/add");
-		return modelAndView;
-	}
-
-	@PostMapping("/guardar")
-	public ModelAndView saveUsuario(@ModelAttribute("Usuario") UsuarioDTO usuarioDTO) {
-		if (usuarioService.getOneUsuario(usuarioDTO.getNombreUsuario()) == true) {
-			// JOptionPane.showInputDialog("Este nombre ya esta registrado"); -- incluir
-			// mensage pero da error
-			return new ModelAndView("redirect:/players");
+	/// http://localhost:9000/players/add ---- crear jugador
+	@PostMapping("/add")
+	public ResponseEntity<Usuario> addUsuario(@RequestBody UsuarioDTO usuariodto) {
+		if (usuarioService.getOneUsuario(usuariodto.getNombreUsuario()) == true) {
+			JOptionPane.showInputDialog("Este nombre ya esta registrado"); // incluirmensage pero da error
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		} else {
-			usuarioService.addUsuario(usuarioDTO);
+			try {
+				return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.addUsuario(usuariodto));
+			} catch (Exception e) {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			}
 		}
-		return new ModelAndView("redirect:/players/ranking");
 	}
 
 	// http://localhost:9000/players/add/{id}/games ---- jugada
-	@GetMapping("/add/{id}/games")
-	public ModelAndView addPartida() {
-		PartidaDTO partida = new PartidaDTO();
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.addObject("Partida", partida);
-		modelAndView.setViewName("aplicacion/jugada");
-		return modelAndView;
-	}
-
-	@PostMapping("/guardarPartida")
-	public ModelAndView savePatida(@ModelAttribute("Partida") PartidaDTO partidaDTO) {
-		usuarioService.addPartida(partidaDTO);
-		return new ModelAndView("redirect:/players/getAllPartidas");
+	@PostMapping("/add/{id}/games")
+	public ResponseEntity<Partida> savePatida(@PathVariable("id") Integer usuarioID,
+			@RequestBody PartidaDTO partidadto) {
+		try {
+			return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.addPartida(usuarioID, partidadto));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
 	}
 
 	// http://localhost:9000/players/getAll ---- recuperar todos los usuarios con el
 	// porcentage de aciertos
 	@GetMapping("/ranking")
-	public ModelAndView listaAllUsuarios(ModelAndView modelAndView) {
-		List<UsuarioDTO> usuarios = usuarioService.getAllUsuario();
-		modelAndView.addObject("Lista_Usuarios", usuarios);
-		modelAndView.setViewName("aplicacion/getAll");
-		return modelAndView;
+	public List<UsuarioDTO> listaAllUsuarios() {
+		List<UsuarioDTO> usuarios = StreamSupport.stream(usuarioService.getAllUsuario().spliterator(), false)
+				.collect(Collectors.toList());
+		return usuarios;
 	}
 
 	// http://localhost:9000/players/getAllPartidasUsuario ---- recuperar todas las
 	// partidas de un usuario
-	@GetMapping("/getAllPatidas/{id}")
-	public ModelAndView listaAllPartidas(ModelAndView modelAndView, @PathVariable("id") Integer usuarioID) {
-		List<PartidaDTO> partidas = usuarioService.getAllPartidasUsuario(usuarioID);
-		modelAndView.addObject("Lista_Partidas", partidas);
-		modelAndView.setViewName("aplicacion/getAllPartidas");
-		return modelAndView;
+	@GetMapping("/getAllPartidas/{id}")
+	public List<PartidaDTO> listaAllPartidas(@PathVariable("id") Integer usuarioID) {
+		List<PartidaDTO> partidas = StreamSupport
+				.stream(usuarioService.getAllPartidasUsuario(usuarioID).spliterator(), false)
+				.collect(Collectors.toList());
+		return partidas;
 	}
 
 	// http://localhost:9000/players/getOne/{id} ----- recuperar usuario por id
 	@GetMapping("/getOne/{id}")
-	public ModelAndView getOneUsuario(ModelAndView modelAndView, @PathVariable("id") Integer id) {
-		UsuarioDTO usuario = usuarioService.getOneUsuario(id);
-		modelAndView.addObject("Usuario", usuario);
-		modelAndView.setViewName("aplicacion/getOne");
-		return modelAndView;
-	}
-
-	@GetMapping("/entrar")
-	public ModelAndView entrarUsuario() {
-		UsuarioDTO usuario = new UsuarioDTO();
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.addObject("Usuario", usuario);
-		modelAndView.setViewName("aplicacion/jugada");
-		return modelAndView;
-	}
-	
-	// http://localhost:9000/players/jugada/{nombreUsuario} ----- recuperar usuario por nombre
-	@GetMapping("/jugada/{nombreUsuario}")
-	public ModelAndView getJugador(ModelAndView modelAndView, @PathVariable("nombreUsuario") String nombreUsuario) {
-		UsuarioDTO usuario = usuarioService.getOneUsuario(usuarioService.getJugador(nombreUsuario));
-		modelAndView.addObject("Usuario", usuario);
-		modelAndView.setViewName("aplicacion/jugada");
-		return modelAndView;
+	public ResponseEntity<UsuarioDTO> getOneUsuario(@PathVariable("id") Integer id) {
+		return ResponseEntity.ok(usuarioService.getOneUsuario(id));
 	}
 
 	// http://localhost:9000/players/ranking/loser ----- recuperar usuario con peor
 	// ranking de partidas ganadas
 	@GetMapping("/ranking/loser")
-	public ModelAndView getloser(ModelAndView modelAndView) {
+	public ResponseEntity<UsuarioDTO> getloser() {
 		List<UsuarioDTO> usuarios = usuarioService.getAllUsuario();
 		float porcentage = Integer.MAX_VALUE;
 		UsuarioDTO usuariodto = new UsuarioDTO();
@@ -131,15 +107,13 @@ public class UsuarioController {
 				porcentage = usuarios.get(i).getPorcentageExito();
 			}
 		}
-		modelAndView.addObject("UsuarioLosar", usuariodto);
-		modelAndView.setViewName("aplicacion/getOne");
-		return modelAndView;
+		return ResponseEntity.ok(usuariodto);
 	}
 
 	// http://localhost:9000/players/ranking/winner ----- recuperar usuario con
 	// mejor ranking de partidas ganadas
 	@GetMapping("/ranking/winner")
-	public ModelAndView getwinner(ModelAndView modelAndView) {
+	public ResponseEntity<UsuarioDTO> getwinner() {
 		List<UsuarioDTO> usuarios = usuarioService.getAllUsuario();
 		float porcentage = Integer.MIN_VALUE;
 		UsuarioDTO usuariodto = new UsuarioDTO();
@@ -149,34 +123,48 @@ public class UsuarioController {
 				porcentage = usuarios.get(i).getPorcentageExito();
 			}
 		}
-		modelAndView.addObject("UsuarioLosar", usuariodto);
-		modelAndView.setViewName("aplicacion/getOne");
-		return modelAndView;
+		return ResponseEntity.ok(usuariodto);
+	}
+
+	// http://localhost:9000/players/ranking/porcentajeTotal----- recuperar usuario
+	// con
+	// mejor ranking de partidas ganadas
+	@GetMapping("/ranking/porcentajeTotal")
+	public float getporcentajeTotal() {
+		List<Partida> partidas = usuarioService.getAllPartidas();
+		int ganadas = 0;
+		float porcentage = 0;
+		for (Partida partidaDTO : partidas) {
+			if (partidaDTO.isResultado() == true) {
+				++ganadas;
+			}
+		}
+		porcentage = (float) ((ganadas * 100) / partidas.size());
+
+		return porcentage;
 	}
 
 	// http://localhost:9000/players/update ---- actualizar o modificar usuario
-	@GetMapping("/update/{id}")
-	public ModelAndView updateUsuario(ModelAndView modelAndView, @PathVariable("id") Integer id) {
-		UsuarioDTO usuarioDTO = usuarioService.getOneUsuario(id);
-		usuarioService.updateUsuario(id, usuarioDTO);
-		modelAndView.addObject("Usuario", usuarioDTO);
-		modelAndView.setViewName("aplicacion/update");
-		return modelAndView;
+	@PutMapping("/update/{id}")
+	public ResponseEntity<UsuarioDTO> updateUsuario(@PathVariable("id") Integer id,
+			@RequestBody UsuarioDTO usuariodto) {
+		UsuarioDTO usuarioNuevoDTO = usuarioService.updateUsuario(id, usuariodto);
+		return ResponseEntity.ok(usuarioNuevoDTO);
 	}
 
 	// http://localhost:9000/usuario/delete/{id} ---- borrar usuario por id
-	@GetMapping("/delete/{id}")
-	public ModelAndView deleteUsuario(@PathVariable("id") Integer id) {
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<HttpStatus> deleteUsuario(@PathVariable("id") Integer id) {
 		usuarioService.deleteUsuario(id);
-		return new ModelAndView("redirect:/players/ranking");
+		return ResponseEntity.ok().build();
 	}
 
 	// http://localhost:9000/usuario/deletepartidas/{id} ---- borrar todas las
 	// partidas de un usuario
-	@GetMapping("/deletePartidas/{id}")
-	public ModelAndView deletePartidasUsuario(@PathVariable("id") Integer id) {
+	@DeleteMapping("/delete/{id}/games")
+	public ResponseEntity<HttpStatus> deletePartidasUsuario(@PathVariable("id") Integer id) {
 		usuarioService.deletePartidasUsuario(id);
-		return new ModelAndView("redirect:/players/ranking");
+		return ResponseEntity.ok().build();
 	}
 
 }

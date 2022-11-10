@@ -90,7 +90,7 @@ public class Usuario {
 	}
 
 	// retornar las partidas de ese usuario en concreto
-	public List<Partida> getPartidas(Integer usuarioID) {
+	public List<Partida> getPartidas() {
 		List<Partida> lista = new ArrayList<Partida>();
 		for (Partida partida : partidas) {
 			if (partida.getUsuarioID().equals(this.usuarioID)) {

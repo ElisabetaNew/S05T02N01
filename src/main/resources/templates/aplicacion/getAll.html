@@ -37,8 +37,10 @@
 					<td th:text="${usuario.porcentageExito}"></td>
 
 
+
 					<td><a class="btn btn-info" th:href="@{'/players/getOne/' + ${usuario.usuarioID}}" role="button">Ver
 							detalle</a></td>
+					<td><a class="btn btn-info" th:href="@{'/players/add/'+ ${usuario.usuarioID} + '/games'}" role="button">Jugar Partida</a></td>
 					<td><a class="btn btn-warning" th:href="@{'/players/update/' + ${usuario.usuarioID}}"
 							role="button">Modificar sucursal</a></td>
 					<td><a class="btn btn-danger" th:href="@{'/players/delete/' + ${usuario.usuarioID}}" role="button"
