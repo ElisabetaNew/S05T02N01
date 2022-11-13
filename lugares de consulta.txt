@@ -24,3 +24,9 @@ fecha registro - if : https://developer.mozilla.org/es/docs/Web/JavaScript/Refer
 
 Borrar de una lista: forEach - Iterator
 
+Que es NAN: https://learn.microsoft.com/es-es/azure/databricks/kb/dbsql/display-null-as-nan
+
+Respuesta nombre duplicado: https://javadesde0.com/responseentity-y-http-response/
+
+ 
+
