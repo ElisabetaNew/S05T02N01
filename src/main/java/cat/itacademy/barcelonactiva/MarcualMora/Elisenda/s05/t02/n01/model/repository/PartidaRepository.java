@@ -8,8 +8,6 @@ import cat.itacademy.barcelonactiva.MarcualMora.Elisenda.s05.t02.n01.model.domai
 
 @Repository
 public interface PartidaRepository extends JpaRepository <Partida, Integer> {
-		
-	//findAll(Sort sort)	 
-
+		 
 
 }

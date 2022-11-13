@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import javax.swing.JOptionPane;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,8 +45,7 @@ public class UsuarioController {
 	@PostMapping("/add")
 	public ResponseEntity<Usuario> addUsuario(@RequestBody UsuarioDTO usuariodto) {
 		if (usuarioService.getOneUsuario(usuariodto.getNombreUsuario()) == true) {
-			JOptionPane.showInputDialog("Este nombre ya esta registrado"); // incluirmensage pero da error
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity("Este nombre ya esta registrado.", HttpStatus.NOT_ACCEPTABLE);
 		} else {
 			try {
 				return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.addUsuario(usuariodto));
@@ -69,8 +66,7 @@ public class UsuarioController {
 		}
 	}
 
-	// http://localhost:9000/players/getAll ---- recuperar todos los usuarios con el
-	// porcentage de aciertos
+	// http://localhost:9000/players/getAll ---- recuperar todos los usuarios con el porcentage de aciertos
 	@GetMapping("/ranking")
 	public List<UsuarioDTO> listaAllUsuarios() {
 		List<UsuarioDTO> usuarios = StreamSupport.stream(usuarioService.getAllUsuario().spliterator(), false)
@@ -78,8 +74,7 @@ public class UsuarioController {
 		return usuarios;
 	}
 
-	// http://localhost:9000/players/getAllPartidasUsuario ---- recuperar todas las
-	// partidas de un usuario
+	// http://localhost:9000/players/getAllPartidasUsuario ---- recuperar todas las partidas de un usuario
 	@GetMapping("/getAllPartidas/{id}")
 	public List<PartidaDTO> listaAllPartidas(@PathVariable("id") Integer usuarioID) {
 		List<PartidaDTO> partidas = StreamSupport
@@ -94,8 +89,7 @@ public class UsuarioController {
 		return ResponseEntity.ok(usuarioService.getOneUsuario(id));
 	}
 
-	// http://localhost:9000/players/ranking/loser ----- recuperar usuario con peor
-	// ranking de partidas ganadas
+	// http://localhost:9000/players/ranking/loser ----- recuperar usuario con peor ranking de partidas ganadas
 	@GetMapping("/ranking/loser")
 	public ResponseEntity<UsuarioDTO> getloser() {
 		List<UsuarioDTO> usuarios = usuarioService.getAllUsuario();
@@ -110,8 +104,7 @@ public class UsuarioController {
 		return ResponseEntity.ok(usuariodto);
 	}
 
-	// http://localhost:9000/players/ranking/winner ----- recuperar usuario con
-	// mejor ranking de partidas ganadas
+	// http://localhost:9000/players/ranking/winner ----- recuperar usuario con mejor ranking de partidas ganadas
 	@GetMapping("/ranking/winner")
 	public ResponseEntity<UsuarioDTO> getwinner() {
 		List<UsuarioDTO> usuarios = usuarioService.getAllUsuario();
@@ -126,9 +119,7 @@ public class UsuarioController {
 		return ResponseEntity.ok(usuariodto);
 	}
 
-	// http://localhost:9000/players/ranking/porcentajeTotal----- recuperar usuario
-	// con
-	// mejor ranking de partidas ganadas
+	// http://localhost:9000/players/ranking/porcentajeTotal----- recuperar usuario con mejor ranking de partidas ganadas
 	@GetMapping("/ranking/porcentajeTotal")
 	public float getporcentajeTotal() {
 		List<Partida> partidas = usuarioService.getAllPartidas();
@@ -140,7 +131,6 @@ public class UsuarioController {
 			}
 		}
 		porcentage = (float) ((ganadas * 100) / partidas.size());
-
 		return porcentage;
 	}
 
@@ -148,8 +138,12 @@ public class UsuarioController {
 	@PutMapping("/update/{id}")
 	public ResponseEntity<UsuarioDTO> updateUsuario(@PathVariable("id") Integer id,
 			@RequestBody UsuarioDTO usuariodto) {
-		UsuarioDTO usuarioNuevoDTO = usuarioService.updateUsuario(id, usuariodto);
-		return ResponseEntity.ok(usuarioNuevoDTO);
+		if (usuarioService.getOneUsuario(usuariodto.getNombreUsuario()) == true) {
+			return new ResponseEntity("Este nombre ya esta registrado.", HttpStatus.NOT_ACCEPTABLE);
+		} else {
+			UsuarioDTO usuarioNuevoDTO = usuarioService.updateUsuario(id, usuariodto);
+			return ResponseEntity.ok(usuarioNuevoDTO);
+		}
 	}
 
 	// http://localhost:9000/usuario/delete/{id} ---- borrar usuario por id
@@ -159,8 +153,7 @@ public class UsuarioController {
 		return ResponseEntity.ok().build();
 	}
 
-	// http://localhost:9000/usuario/deletepartidas/{id} ---- borrar todas las
-	// partidas de un usuario
+	// http://localhost:9000/usuario/deletepartidas/{id} ---- borrar todas las partidas de un usuario
 	@DeleteMapping("/delete/{id}/games")
 	public ResponseEntity<HttpStatus> deletePartidasUsuario(@PathVariable("id") Integer id) {
 		usuarioService.deletePartidasUsuario(id);

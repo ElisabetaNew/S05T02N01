@@ -37,8 +37,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 		partidaDTO.setDado1(dado1);
 		int dado2 = tirada();
 		partidaDTO.setDado2(dado2);
-		// int total = dado1 + dado2;
-		// partidaDTO.setTotal(dado1 + dado2);
 		partidaDTO.setResultado(resultado(dado1 + dado2));
 		Partida partida = this.mapDTOtoEntityPartida(partidaDTO);
 		return partidaRepository.save(partida);
@@ -47,17 +45,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 	@Override
 	public List<UsuarioDTO> getAllUsuario() {
 		List<Usuario> usuarios = usuarioRepository.findAll();
-		for (Usuario usuario : usuarios) {
-			List<Partida> partidas = usuario.getPartidas();
-			int ganadas = 0;
-			for (Partida partida : partidas) {
-				if (partida.isResultado() == true) {
-					++ganadas;
-				}
-			}
-			usuario.setPorcentageExito((float) (ganadas * 100) / partidas.size());
-
-		}
 		return this.getDTOByUsuarios(usuarios);
 	}
 
@@ -169,8 +156,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 		dto.setUsuarioID(usuario.getUsuarioID());
 		dto.setNombreUsuario(usuario.getNombreUsuario());
 		dto.setFechaRegistro(usuario.getFechaRegistro());
-		dto.setPorcentageExito(usuario.getPorcentageExito());
 		dto.setPartidas(usuario.getPartidas());
+		dto.setPorcentageExito();
+		
 
 		return dto;
 	}
@@ -202,8 +190,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 			usuario.setFechaRegistro(udto.getFechaRegistro());
 		}
 		usuario.setPartidas(udto.getPartidas());
-		usuario.setPorcentageExito(udto.getPorcentageExito());
-		// usuario.addPartida(dto.)
+		usuario.setPorcentageExito();
+
 
 		return usuario;
 	}
@@ -288,4 +276,17 @@ public class UsuarioServiceImpl implements UsuarioService {
 		}
 		return false;
 	}
+	
+	//calcular porcentage de acierto de un jugador
+	public float porcentageExitoJugador(List<Partida>partidas) {
+		int ganadas = 0;
+		for (Partida partida : partidas) {
+			if (partida.isResultado() == true) {
+				++ganadas;
+			}
+		}
+		return ((float) (ganadas * 100) / partidas.size());
+	}
+
+		
 }

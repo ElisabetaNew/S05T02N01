@@ -1,5 +1,6 @@
 package cat.itacademy.barcelonactiva.MarcualMora.Elisenda.s05.t02.n01.model.domain;
 
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,13 +11,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 
 @Entity
 @Table(name = "usuarios")
-public class Usuario {
+public class Usuario{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +36,7 @@ public class Usuario {
 	private float porcentageExito;
 
 	@OneToMany(mappedBy = "usuarioID", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Partida> partidas = new ArrayList<>();
+	private List<Partida> partidas;
 
 	// Constructores
 	public Usuario() {
@@ -114,9 +116,9 @@ public class Usuario {
 		return porcentageExito;
 	}
 
-	public void setPorcentageExito(float porcentageExito) {
-		this.porcentageExito = porcentageExito;
-	}
+//	public void setPorcentageExito(float porcentageExito) {
+//		this.porcentageExito = porcentageExito;
+//	}
 
 	@Override
 	public String toString() {
@@ -124,4 +126,19 @@ public class Usuario {
 				+ fechaRegistro + ", porcentageExito=" + porcentageExito + ", partidas=" + partidas + "]";
 	}
 
+	//para obtener el percentatge contar partidas ganadas y dividirlas por total partidas
+	public void setPorcentageExito() {
+		if(this.partidas.size()==0) {
+			this.porcentageExito = 0;
+		} else {
+		List<Partida> lista = new ArrayList<Partida>();
+		for (Partida partida : partidas) {
+			if (partida.isResultado()== true) {
+				lista.add(partida);
+			}
+		}
+		this.partidas.size();
+		this.porcentageExito = (100*lista.size())/this.partidas.size();
+	}
+	}
 }

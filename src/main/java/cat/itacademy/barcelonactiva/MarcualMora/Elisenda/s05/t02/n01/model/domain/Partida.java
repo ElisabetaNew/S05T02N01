@@ -1,41 +1,38 @@
 package cat.itacademy.barcelonactiva.MarcualMora.Elisenda.s05.t02.n01.model.domain;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "partidas")
-public class Partida{
+public class Partida {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_partida")
 	private Integer partidaID;
-	
+
 	@Column(name = "dado1", length = 3, nullable = false)
 	private int dado1;
-	
+
 	@Column(name = "dado2", length = 3, nullable = false)
 	private int dado2;
-	
+
 	@Column(name = "partida_ganada", length = 3, nullable = false)
 	private boolean resultado;
-	
-	//relacion bidireccional por ser la más optima en recursos
-	//@ManyToOne
-	@JoinColumn(name = "usuarioID", nullable = false, updatable = false)
+
+	// relacion bidireccional por ser la más optima en recursos
+	// @ManyToOne (cascade = CascadeType.ALL)
+	@JoinColumn(name = "usuarioID", referencedColumnName = "usuarioID", nullable = false, updatable = false)
 	private Integer usuarioID;
 
-	
-	//constructores
+	// constructores
 	public Partida(Integer partidaID, int dado1, int dado2, boolean resultado, Integer usuarioID) {
 		super();
 		this.partidaID = partidaID;
@@ -44,23 +41,21 @@ public class Partida{
 		this.resultado = resultado;
 		this.usuarioID = usuarioID;
 	}
-	
+
 	public Partida(int dado1, int dado2, Integer usuarioID) {
 		this.dado1 = dado1;
 		this.dado2 = dado2;
 		this.usuarioID = usuarioID;
 	}
-	
+
 	public Partida() {
-		
+
 	}
-	
-	//Getters y setters
+
+	// Getters y setters
 	public Integer getPartidaID() {
 		return partidaID;
 	}
-
-	
 
 	public void setPartidaID(Integer partidaID) {
 		this.partidaID = partidaID;
@@ -104,7 +99,4 @@ public class Partida{
 				+ ", usuarioID=" + usuarioID + "]";
 	}
 
-	
-
-	
 }
