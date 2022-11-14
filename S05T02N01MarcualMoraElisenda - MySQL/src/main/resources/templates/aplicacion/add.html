@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<title>Juego Dados</title>
+
+
+<!-- Bootstrap CSS -->
+<link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}">
+</head>
+
+<body>
+
+	<h1 class="text-black">Nuevo Usuario</h1>
+
+	<form th:action="@{/players/guardar}" th:object="${Usuario}" method="post">
+
+		<div class="form-group row">
+			<label class="col-lg-3 col-form-label form-control-label text-center text-white required">Nombre
+				Usario</label>
+			<div class="col-lg-3">
+				<input type="text" th:field="*{nombreUsuario}" placeholder="Nombre Usuario"
+					class="form-control mb-4 col-4"> <br>
+			</div>
+		</div>
+
+		<div class="col-lg-8 text-center">
+			<button type="submit" class="btn btn-info col-2"> Grabar usuario</button>
+
+		</div>
+
+		<br>
+
+		<div class="col-lg-6 text-center">
+			<span>Si ya estas registrado ves a la pantalla: </a></span>
+			<a class="btn btn-info col-2" th:href="@{/players/}" role="button">Incio</a>
+		</div>
+
+
+
+	</form>
+
+
+</body>
+
+<footer th:replace="plantillas/template :: footer"></footer>

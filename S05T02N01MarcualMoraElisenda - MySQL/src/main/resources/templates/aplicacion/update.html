@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<title>Juego Dados</title>
+
+
+<!-- Bootstrap CSS -->
+<link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}">
+</head>
+
+<body>
+
+		<a class="btn btn-primary" th:href="@{/players/}" role="button">Pantalla inicio</a>
+		<br>
+	<h1 class="text-black">Modificar Usuario</h1>
+	
+	
+
+	<form th:action="@{/players/guardar}" th:object="${Usuario}" method="post">
+
+		<input type="hidden" th:field="*{usuarioID}">
+
+		<div class="form-group row">
+			<label class="col-lg-3 text-center text-black">Nombre Usuario
+			</label>
+			<input type="text" th:field="*{nombreUsuario}"> <br>
+			<label class="col-lg-3 text-center text-black required">Fecha Registro
+			</label>
+			<input type="text" th:field="*{fechaRegistro}"> <br>
+			<label class="col-lg-3 text-center text-black required">Porcentage
+				Exito</label>
+			<input type="text" th:field="*{porcentageExito}"> <br>
+		</div>
+
+		<button type="submit" class="btn btn-success"> Save Changes</button>
+		<a class="btn btn-danger" th:href="@{/players/ranking}" role="button">Cancelar y volver al listado</a>
+	</form>
+
+</body>
+
+<footer th:replace="plantillas/template :: footer"></footer>
