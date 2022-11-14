@@ -28,5 +28,13 @@ Que es NAN: https://learn.microsoft.com/es-es/azure/databricks/kb/dbsql/display-
 
 Respuesta nombre duplicado: https://javadesde0.com/responseentity-y-http-response/
 
+Añadir dependencias: https://mvnrepository.com/
+
+Persistencia MongoDB https://www.youtube.com/watch?v=waVen9OVMTI
+
+Concepto de embeddable: https://www.arquitecturajava.com/ejemplo-jpa-embedded/  --> dos clases - una sola tabla
+
+
+
  
 
